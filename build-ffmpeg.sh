@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # directories
-FF_VERSION="4.3.1"
+FF_VERSION="3.2"
 #FF_VERSION="snapshot-git"
 if [[ $FFMPEG_VERSION != "" ]]; then
   FF_VERSION=$FFMPEG_VERSION
@@ -18,7 +18,19 @@ THIN=`pwd`/"thin"
 
 #FDK_AAC=`pwd`/../fdk-aac-build-script-for-iOS/fdk-aac-ios
 
+#  --enable-shared \
+# --disable-static \
 CONFIGURE_FLAGS="--enable-cross-compile --disable-debug --disable-programs \
+				--enable-runtime-cpudetect \
+				--enable-small \
+				--disable-ffmpeg \
+				--disable-ffplay \
+				--disable-ffprobe \
+				--disable-ffserver \
+				--disable-postproc \
+				--disable-avdevice \
+				--disable-symver \
+				--disable-stripping \
                  --disable-doc --enable-pic"
 
 if [ "$X264" ]
@@ -131,6 +143,9 @@ then
 			CFLAGS="$CFLAGS -I$FDK_AAC/include"
 			LDFLAGS="$LDFLAGS -L$FDK_AAC/lib"
 		fi
+        
+		echo install: $THIN/$ARCH
+        echo flags: $CONFIGURE_FLAGS
 
 		TMPDIR=${TMPDIR/%\/} $CWD/$SOURCE/configure \
 		    --target-os=darwin \
